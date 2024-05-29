@@ -2413,6 +2413,7 @@ __webpack_require__.r(__webpack_exports__);
       this.statuses[statusIndex].tasks.push(newTask); // Reset and close the AddTaskForm
 
       this.closeAddTaskForm();
+      this.get();
     },
     handleTaskUpdated: function handleTaskUpdated(all_task) {
       var statusIndex = this.statuses.findIndex(function (status) {
@@ -2433,6 +2434,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
       this.closeAddTaskForm();
+      this.get();
     },
     handleTaskMoved: function handleTaskMoved(evt) {
       var _this3 = this;

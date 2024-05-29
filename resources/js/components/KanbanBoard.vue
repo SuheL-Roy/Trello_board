@@ -234,6 +234,7 @@ export default {
 
       // Reset and close the AddTaskForm
       this.closeAddTaskForm();
+      this.get();
     },
     handleTaskUpdated(all_task) {
       const statusIndex = this.statuses.findIndex(
@@ -259,6 +260,7 @@ export default {
 
       // Reset and close the AddTaskForm
       this.closeAddTaskForm();
+      this.get();
     },
     handleTaskMoved(evt) {
       axios
