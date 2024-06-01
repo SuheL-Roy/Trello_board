@@ -3,7 +3,7 @@ require("./bootstrap");
 window.Vue = require("vue");
 
 // Register our components
-Vue.component("kanban-board", require("./components/KanbanBoard.vue").default);
+Vue.component("trello-board", require("./components/TrelloBoard.vue").default);
 
 const app = new Vue({
   el: "#app"

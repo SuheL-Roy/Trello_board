@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Status;
 use App\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
     public function index()
     {
         $tasks = auth()->user()->statuses()->with('tasks')->get();
-
+     
         return view('tasks.index', compact('tasks'));
     }
 

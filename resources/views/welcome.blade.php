@@ -30,7 +30,7 @@
 
     <div class="min-h-screen flex items-center justify-center">
         <div class="flex flex-col justify-around h-full">
-            <div>
+            {{-- <div>
                 <h1 class="text-gray-600 text-center font-light tracking-wider text-5xl mb-6">
                     {{ config('app.name', 'Laravel') }}
                 </h1>
@@ -60,7 +60,8 @@
                         <a href="https://tailwindcss.com" class="no-underline hover:underline text-sm font-normal text-teal-800 uppercase" title="Tailwind Css">Tailwind CSS</a>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
+           <h1 class="text-gray-600 text-center font-light tracking-wider text-5xl mb-6">Welcome To Trello Board</h1> 
         </div>
     </div>
 </div>

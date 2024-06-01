@@ -5,17 +5,17 @@
   >
     <div class="p-3 flex-1">
       <input
-        class="block w-full px-2 py-1 text-lg border-b border-blue-800 rounded"
+        class="block w-full px-2 py-1 text-lg border-b border-blue-800 rounded no-outline"
         type="text"
         placeholder="Enter a titles"
         v-model.trim="all_task.title"
       />
-      <textarea
+      <!-- <textarea
         class="mt-3 p-2 block w-full p-1 border text-sm rounded"
         rows="2"
         placeholder="Add a description (optional)"
         v-model.trim="all_task.description"
-      ></textarea>
+      ></textarea> -->
       <div v-show="errorMessage">
         <span class="text-xs text-red-500">
           {{ errorMessage }}
@@ -28,7 +28,7 @@
         type="reset"
         class="py-1 leading-5 text-gray-600 hover:text-gray-700"
       >
-        cancel
+        Cancel
       </button>
       <button
         type="update"
@@ -103,4 +103,4 @@ export default {
   }
 };
 </script>
-import { update } from 'lodash';
+

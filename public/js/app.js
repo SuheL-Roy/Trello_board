@@ -2028,6 +2028,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/tasks", this.newTask).then(function (res) {
         // Tell the parent component we've added a new task and include it
         _this.$emit("task-added", res.data);
+
+        _this.newTask.title = '';
       })["catch"](function (err) {
         // Handle the error returned from our request
         _this.handleErrors(err);
@@ -2171,9 +2173,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KanbanBoard.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrelloBoard.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KanbanBoard.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrelloBoard.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -2184,6 +2186,77 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _AddTaskForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddTaskForm */ "./resources/js/components/AddTaskForm.vue");
 /* harmony import */ var _EditTaskForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EditTaskForm */ "./resources/js/components/EditTaskForm.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2338,10 +2411,13 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       statuses: [],
+      items: [],
+      boards: [],
       newTaskForStatus: 0,
       EditTaskForStatus: 0,
       task_ids: 0,
       showEditButton: false,
+      isOpen: false,
       board: {
         title: ""
       },
@@ -2358,11 +2434,27 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    // 'clone' the statuses so we don't alter the prop when making changes
-    // this.statuses = JSON.parse(JSON.stringify(this.initialData));
     this.get();
   },
   methods: {
+    // Task(){
+    //    console.log(this.items);
+    // },
+    // saveTask2() {
+    //   console.log(this.board);
+    // },
+    // deleteTask2(taskId) {
+    //   this.isOpen = true;
+    //   axios
+    //     .get(`id-wise-task/${taskId}`)
+    //     .then(res => {
+    //       this.boards = res.data;
+    //     })
+    //     .catch(err => {
+    //       // Handle the error returned from our request
+    //       this.handleErrors(err);
+    //     });
+    // },
     saveTask: function saveTask() {
       var _this = this;
 
@@ -2372,12 +2464,10 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post("/statuses", this.board).then(function (res) {
-        // Tell the parent component we've added a new task and include it
         _this.get();
 
-        _this.board.title = '';
+        _this.board.title = "";
       })["catch"](function (err) {
-        // Handle the error returned from our request
         _this.handleErrors(err);
       });
     },
@@ -2385,11 +2475,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios["delete"]("remove/".concat(taskId)).then(function (res) {
-        // Tell the parent component we've added a new task and include it
-        // this.statuses = res.data;
         _this2.get();
       })["catch"](function (err) {
-        // Handle the error returned from our request
         _this2.handleErrors(err);
       });
     },
@@ -2411,8 +2498,8 @@ __webpack_require__.r(__webpack_exports__);
       }); // Add newly created task to our column
 
       this.statuses[statusIndex].tasks.push(newTask); // Reset and close the AddTaskForm
+      // this.closeAddTaskForm();
 
-      this.closeAddTaskForm();
       this.get();
     },
     handleTaskUpdated: function handleTaskUpdated(all_task) {
@@ -2443,6 +2530,8 @@ __webpack_require__.r(__webpack_exports__);
         columns: this.statuses
       }).then(function (response) {
         _this3.get();
+
+        _this3.closeAddTaskForm();
       })["catch"](function (err) {
         console.log(err.response);
       });
@@ -2453,6 +2542,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/all-tasks", this.newTask).then(function (res) {
         // Tell the parent component we've added a new task and include it
         _this4.statuses = res.data;
+        _this4.items = res.data;
       })["catch"](function (err) {
         // Handle the error returned from our request
         _this4.handleErrors(err);
@@ -2463,9 +2553,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css&":
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css&":
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css& ***!
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css& ***!
   \*****************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -2475,7 +2565,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.status-drag[data-v-12d93558] {\r\n  transition: transform 0.5s;\r\n  transition-property: all;\n}\n.no-outline[data-v-12d93558]:focus {\r\n  outline: none;\n}\r\n", ""]);
+exports.push([module.i, "\n.status-drag[data-v-6376dfc3] {\r\n  transition: transform 0.5s;\r\n  transition-property: all;\n}\n.no-outline[data-v-6376dfc3]:focus {\r\n  outline: none;\n}\r\n", ""]);
 
 // exports
 
@@ -23842,15 +23932,15 @@ Sortable.mount(Remove, Revert);
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css&":
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css&":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css& ***!
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css& ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css&");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -24496,7 +24586,7 @@ var render = function() {
             }
           ],
           staticClass:
-            "block w-full px-2 py-1 text-lg border-b border-blue-800 rounded",
+            "block w-full px-2 py-1 text-lg border-b border-blue-800 rounded no-outline",
           attrs: { type: "text", placeholder: "Enter a title" },
           domProps: { value: _vm.newTask.title },
           on: {
@@ -24505,32 +24595,6 @@ var render = function() {
                 return
               }
               _vm.$set(_vm.newTask, "title", $event.target.value.trim())
-            },
-            blur: function($event) {
-              return _vm.$forceUpdate()
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model.trim",
-              value: _vm.newTask.description,
-              expression: "newTask.description",
-              modifiers: { trim: true }
-            }
-          ],
-          staticClass: "mt-3 p-2 block w-full p-1 border text-sm rounded",
-          attrs: { rows: "2", placeholder: "Add a description (optional)" },
-          domProps: { value: _vm.newTask.description },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.newTask, "description", $event.target.value.trim())
             },
             blur: function($event) {
               return _vm.$forceUpdate()
@@ -24575,7 +24639,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("\n      cancel\n    ")]
+            [_vm._v("\n      Cancel\n    ")]
           ),
           _vm._v(" "),
           _c(
@@ -24639,7 +24703,7 @@ var render = function() {
             }
           ],
           staticClass:
-            "block w-full px-2 py-1 text-lg border-b border-blue-800 rounded",
+            "block w-full px-2 py-1 text-lg border-b border-blue-800 rounded no-outline",
           attrs: { type: "text", placeholder: "Enter a titles" },
           domProps: { value: _vm.all_task.title },
           on: {
@@ -24648,32 +24712,6 @@ var render = function() {
                 return
               }
               _vm.$set(_vm.all_task, "title", $event.target.value.trim())
-            },
-            blur: function($event) {
-              return _vm.$forceUpdate()
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model.trim",
-              value: _vm.all_task.description,
-              expression: "all_task.description",
-              modifiers: { trim: true }
-            }
-          ],
-          staticClass: "mt-3 p-2 block w-full p-1 border text-sm rounded",
-          attrs: { rows: "2", placeholder: "Add a description (optional)" },
-          domProps: { value: _vm.all_task.description },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.all_task, "description", $event.target.value.trim())
             },
             blur: function($event) {
               return _vm.$forceUpdate()
@@ -24718,7 +24756,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("\n      cancel\n    ")]
+            [_vm._v("\n      Cancel\n    ")]
           ),
           _vm._v(" "),
           _c(
@@ -24742,9 +24780,9 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KanbanBoard.vue?vue&type=template&id=12d93558&scoped=true&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrelloBoard.vue?vue&type=template&id=6376dfc3&scoped=true&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/KanbanBoard.vue?vue&type=template&id=12d93558&scoped=true& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TrelloBoard.vue?vue&type=template&id=6376dfc3&scoped=true& ***!
   \**************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -24761,194 +24799,456 @@ var render = function() {
     "div",
     { staticClass: "relative p-2 flex overflow-x-auto h-full" },
     [
-      _vm._l(_vm.statuses, function(status) {
-        return _c(
-          "div",
-          {
-            key: status.slug,
-            staticClass: "mr-6 w-4/5 max-w-xs flex-shrink-0",
-            on: {
-              mouseover: function($event) {
-                _vm.showEditButton = true
+      _c(
+        "draggable",
+        { staticClass: "flex dragArea", attrs: { axis: "x" } },
+        [
+          _vm._l(_vm.statuses, function(status) {
+            return _c(
+              "div",
+              {
+                key: status.slug,
+                staticClass: "mr-6 w-4/5 max-w-xs flex-shrink-0",
+                on: {
+                  mouseover: function($event) {
+                    _vm.showEditButton = true
+                  },
+                  mouseleave: function($event) {
+                    _vm.showEditButton = false
+                  }
+                }
               },
-              mouseleave: function($event) {
-                _vm.showEditButton = false
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "rounded-md shadow-md overflow-hidden" }, [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "p-3 flex justify-between items-baseline bg-blue-800"
-                },
-                [
-                  _c("h4", { staticClass: "font-medium text-white" }, [
-                    _vm._v("\n          " + _vm._s(status.title) + "\n        ")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "button",
+              [
+                _c(
+                  "div",
+                  { staticClass: "rounded-md shadow-md overflow-hidden" },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "p-3 flex justify-between items-baseline bg-blue-800"
+                      },
+                      [
+                        _c("h4", { staticClass: "font-medium text-white" }, [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(status.title) +
+                              "\n          "
+                          )
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "p-2 bg-blue-100" },
+                      [
+                        _vm.newTaskForStatus === status.id
+                          ? _c("AddTaskForm", {
+                              attrs: { "status-id": status.id },
+                              on: {
+                                "task-added": _vm.handleTaskAdded,
+                                "task-canceled": _vm.closeAddTaskForm
+                              }
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.EditTaskForStatus === status.id
+                          ? _c("EditTaskForm", {
+                              attrs: { "task-id": _vm.task_ids },
+                              on: {
+                                "task-updated": _vm.handleTaskUpdated,
+                                "task-canceled": _vm.closeAddTaskForm
+                              }
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "draggable",
+                          _vm._b(
+                            {
+                              staticClass: "flex-1 overflow-hidden",
+                              on: { end: _vm.handleTaskMoved },
+                              model: {
+                                value: status.tasks,
+                                callback: function($$v) {
+                                  _vm.$set(status, "tasks", $$v)
+                                },
+                                expression: "status.tasks"
+                              }
+                            },
+                            "draggable",
+                            _vm.taskDragOptions,
+                            false
+                          ),
+                          [
+                            _c(
+                              "transition-group",
+                              {
+                                staticClass:
+                                  "flex-1 flex flex-col h-full overflow-x-hidden overflow-y-auto rounded shadow-xs",
+                                attrs: { tag: "div" }
+                              },
+                              _vm._l(status.tasks, function(task) {
+                                return _c(
+                                  "div",
+                                  {
+                                    key: task.id,
+                                    staticClass:
+                                      "mb-3 p-4 flex flex-col bg-white rounded-md shadow transform hover:shadow-md cursor-pointer"
+                                  },
+                                  [
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "block mb-2 text-xl text-gray-900"
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                  " +
+                                            _vm._s(task.title) +
+                                            "\n                "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("p", { staticClass: "text-gray-700" }, [
+                                      _vm._v(
+                                        "\n                  " +
+                                          _vm._s(task.description) +
+                                          "\n                "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.showEditButton,
+                                            expression: "showEditButton"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "text-sm text-orange-500 hover:underline absolute top-0 right-0 mr-2 mt-2 no-outline",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.editTask(
+                                              task.status_id,
+                                              task.id
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                  Edit\n                "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.showEditButton,
+                                            expression: "showEditButton"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "text-sm text-orange-500 hover:underline absolute top-0 right-0 mr-2 mt-10 no-outline",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteTask(task.id)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                  Delete\n                "
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "flex-1 p-4 flex flex-col items-center justify-center"
+                          },
+                          [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "mt-1 mr-4 text-sm text-orange-600 hover:underline",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.openAddTaskForm(status.id)
+                                  }
+                                }
+                              },
+                              [_vm._v("\n              Add Task\n            ")]
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                )
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _c("div", [
+            _c("div", [
+              _vm.isOpen
+                ? _c(
+                    "div",
                     {
                       staticClass:
-                        "py-1 px-2 text-sm text-orange-500 hover:underline",
-                      on: {
-                        click: function($event) {
-                          return _vm.openAddTaskForm(status.id)
-                        }
-                      }
+                        "fixed z-10 inset-0 overflow-y-auto flex items-center justify-center"
                     },
-                    [_vm._v("\n          Add Task\n        ")]
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "p-2 bg-blue-100" },
-                [
-                  _vm.newTaskForStatus === status.id
-                    ? _c("AddTaskForm", {
-                        attrs: { "status-id": status.id },
-                        on: {
-                          "task-added": _vm.handleTaskAdded,
-                          "task-canceled": _vm.closeAddTaskForm
-                        }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.EditTaskForStatus === status.id
-                    ? _c("EditTaskForm", {
-                        attrs: { "task-id": _vm.task_ids },
-                        on: {
-                          "task-updated": _vm.handleTaskUpdated,
-                          "task-canceled": _vm.closeAddTaskForm
-                        }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "draggable",
-                    _vm._b(
-                      {
-                        staticClass: "flex-1 overflow-hidden",
-                        on: { end: _vm.handleTaskMoved },
-                        model: {
-                          value: status.tasks,
-                          callback: function($$v) {
-                            _vm.$set(status, "tasks", $$v)
-                          },
-                          expression: "status.tasks"
-                        }
-                      },
-                      "draggable",
-                      _vm.taskDragOptions,
-                      false
-                    ),
                     [
+                      _c("div", {
+                        staticClass:
+                          "modal-overlay fixed inset-0 bg-black opacity-25"
+                      }),
+                      _vm._v(" "),
                       _c(
-                        "transition-group",
+                        "div",
                         {
                           staticClass:
-                            "flex-1 flex flex-col h-full overflow-x-hidden overflow-y-auto rounded shadow-xs",
-                          attrs: { tag: "div" }
+                            "modal-container bg-white w-64 mx-auto rounded shadow-lg z-50 overflow-y-auto"
                         },
-                        _vm._l(status.tasks, function(task) {
-                          return _c(
+                        [
+                          _c(
                             "div",
                             {
-                              key: task.id,
                               staticClass:
-                                "mb-3 p-4 flex flex-col bg-white rounded-md shadow transform hover:shadow-md cursor-pointer"
+                                "modal-header px-4 py-2 bg-gray-200 flex justify-between items-center"
                             },
                             [
                               _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "block mb-2 text-xl text-gray-900"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                " +
-                                      _vm._s(task.title) +
-                                      "\n              "
-                                  )
-                                ]
+                                "h3",
+                                { staticClass: "text-lg font-semibold" },
+                                [_vm._v("Modal Title")]
                               ),
                               _vm._v(" "),
-                              _c("p", { staticClass: "text-gray-700" }, [
-                                _vm._v(
-                                  "\n                " +
-                                    _vm._s(task.description) +
-                                    "\n              "
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "text-gray-600 hover:text-gray-800 focus:outline-none",
+                                  on: {
+                                    click: function($event) {
+                                      _vm.isOpen = false
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "svg",
+                                    {
+                                      staticClass: "h-6 w-6 fill-current",
+                                      attrs: {
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                        viewBox: "0 0 24 24"
+                                      }
+                                    },
+                                    [
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M5.293 6.707a1 1 0 011.414 0L12 10.586l5.293-5.293a1 1 0 111.414 1.414L13.414 12l5.293 5.293a1 1 0 01-1.414 1.414L12 13.414l-5.293 5.293a1 1 0 01-1.414-1.414L10.586 12 5.293 6.707z"
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-body p-4" }, [
+                            _c(
+                              "form",
+                              {
+                                staticClass: "w-64",
+                                on: {
+                                  submit: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.saveTask2($event)
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "bg-white rounded p-6" },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.boards.title,
+                                          expression: "boards.title"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full border rounded-md px-3 py-2 no-outline",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder: "Enter board title"
+                                      },
+                                      domProps: { value: _vm.boards.title },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.boards,
+                                            "title",
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "show",
+                                            rawName: "v-show",
+                                            value: _vm.errorMessage,
+                                            expression: "errorMessage"
+                                          }
+                                        ]
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass: "text-xs text-red-500"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                      " +
+                                                _vm._s(_vm.errorMessage) +
+                                                "\n                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "px-3 py-1 leading-5 text-white bg-orange-600 hover:bg-orange-500 rounded",
+                                        attrs: { type: "submit" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                    Add\n                  "
+                                        )
+                                      ]
+                                    )
+                                  ]
                                 )
-                              ]),
-                              _vm._v(" "),
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "modal-footer px-4 py-2 bg-gray-100 flex justify-end"
+                            },
+                            [
                               _c(
                                 "button",
                                 {
-                                  directives: [
-                                    {
-                                      name: "show",
-                                      rawName: "v-show",
-                                      value: _vm.showEditButton,
-                                      expression: "showEditButton"
-                                    }
-                                  ],
                                   staticClass:
-                                    "text-sm text-orange-500 hover:underline absolute top-0 right-0 mr-2 mt-2 no-outline",
+                                    "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
                                   on: {
                                     click: function($event) {
-                                      return _vm.editTask(
-                                        task.status_id,
-                                        task.id
-                                      )
+                                      _vm.isOpen = false
                                     }
                                   }
                                 },
                                 [
                                   _vm._v(
-                                    "\n                Edit\n              "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "button",
-                                {
-                                  directives: [
-                                    {
-                                      name: "show",
-                                      rawName: "v-show",
-                                      value: _vm.showEditButton,
-                                      expression: "showEditButton"
-                                    }
-                                  ],
-                                  staticClass:
-                                    "text-sm text-orange-500 hover:underline absolute top-0 right-0 mr-2 mt-12 no-outline",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.deleteTask(task.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                Delete\n              "
+                                    "\n                Close\n              "
                                   )
                                 ]
                               )
                             ]
                           )
-                        }),
-                        0
+                        ]
                       )
+                    ]
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                staticClass: "w-64",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveTask($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "bg-white rounded p-6" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.board.title,
+                        expression: "board.title"
+                      }
                     ],
-                    1
-                  ),
+                    staticClass:
+                      "w-full border rounded-md px-3 py-2 no-outline",
+                    attrs: { type: "text", placeholder: "Enter board title" },
+                    domProps: { value: _vm.board.title },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.board, "title", $event.target.value)
+                      }
+                    }
+                  }),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -24957,126 +25257,33 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value:
-                            !status.tasks.length &&
-                            _vm.newTaskForStatus !== status.id,
-                          expression:
-                            "!status.tasks.length && newTaskForStatus !== status.id"
+                          value: _vm.errorMessage,
+                          expression: "errorMessage"
                         }
-                      ],
-                      staticClass:
-                        "flex-1 p-4 flex flex-col items-center justify-center"
+                      ]
                     },
                     [
-                      _c("span", { staticClass: "text-gray-600" }, [
-                        _vm._v("No tasks yet")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "mt-1 text-sm text-orange-600 hover:underline",
-                          on: {
-                            click: function($event) {
-                              return _vm.openAddTaskForm(status.id)
-                            }
-                          }
-                        },
-                        [_vm._v("\n            Add one\n          ")]
-                      )
+                      _c("span", { staticClass: "text-xs text-red-500" }, [
+                        _vm._v(
+                          "\n              " +
+                            _vm._s(_vm.errorMessage) +
+                            "\n            "
+                        )
+                      ])
                     ]
                   )
-                ],
-                1
-              )
-            ])
-          ]
-        )
-      }),
-      _vm._v(" "),
-      _c("div", [
-        _c(
-          "form",
-          {
-            staticClass: "w-64",
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.saveTask($event)
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "bg-white rounded p-6" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.board.title,
-                    expression: " board.title"
-                  }
-                ],
-                staticClass: "w-full border rounded-md px-3 py-2",
-                attrs: { type: "text", placeholder: "Enter board title" },
-                domProps: { value: _vm.board.title },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.board, "title", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.errorMessage,
-                      expression: "errorMessage"
-                    }
-                  ]
-                },
-                [
-                  _c("span", { staticClass: "text-xs text-red-500" }, [
-                    _vm._v("\n        " + _vm._s(_vm.errorMessage) + "\n      ")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _vm._m(0)
-            ])
-          ]
-        )
-      ])
+                ])
+              ]
+            )
+          ])
+        ],
+        2
+      )
     ],
-    2
+    1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mt-4 flex justify-end" }, [
-      _c(
-        "button",
-        {
-          staticClass:
-            "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none",
-          attrs: { type: "submit" }
-        },
-        [_vm._v("\n            Save\n          ")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -40538,7 +40745,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"); // Register our components
 
-Vue.component("kanban-board", __webpack_require__(/*! ./components/KanbanBoard.vue */ "./resources/js/components/KanbanBoard.vue")["default"]);
+Vue.component("trello-board", __webpack_require__(/*! ./components/TrelloBoard.vue */ "./resources/js/components/TrelloBoard.vue")["default"]);
 var app = new Vue({
   el: "#app"
 });
@@ -40726,18 +40933,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/KanbanBoard.vue":
+/***/ "./resources/js/components/TrelloBoard.vue":
 /*!*************************************************!*\
-  !*** ./resources/js/components/KanbanBoard.vue ***!
+  !*** ./resources/js/components/TrelloBoard.vue ***!
   \*************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _KanbanBoard_vue_vue_type_template_id_12d93558_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./KanbanBoard.vue?vue&type=template&id=12d93558&scoped=true& */ "./resources/js/components/KanbanBoard.vue?vue&type=template&id=12d93558&scoped=true&");
-/* harmony import */ var _KanbanBoard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./KanbanBoard.vue?vue&type=script&lang=js& */ "./resources/js/components/KanbanBoard.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _KanbanBoard_vue_vue_type_style_index_0_id_12d93558_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css& */ "./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css&");
+/* harmony import */ var _TrelloBoard_vue_vue_type_template_id_6376dfc3_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TrelloBoard.vue?vue&type=template&id=6376dfc3&scoped=true& */ "./resources/js/components/TrelloBoard.vue?vue&type=template&id=6376dfc3&scoped=true&");
+/* harmony import */ var _TrelloBoard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TrelloBoard.vue?vue&type=script&lang=js& */ "./resources/js/components/TrelloBoard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _TrelloBoard_vue_vue_type_style_index_0_id_6376dfc3_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css& */ "./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -40748,66 +40955,66 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
-  _KanbanBoard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _KanbanBoard_vue_vue_type_template_id_12d93558_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _KanbanBoard_vue_vue_type_template_id_12d93558_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _TrelloBoard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TrelloBoard_vue_vue_type_template_id_6376dfc3_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TrelloBoard_vue_vue_type_template_id_6376dfc3_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "12d93558",
+  "6376dfc3",
   null
   
 )
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/KanbanBoard.vue"
+component.options.__file = "resources/js/components/TrelloBoard.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/KanbanBoard.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/components/TrelloBoard.vue?vue&type=script&lang=js&":
 /*!**************************************************************************!*\
-  !*** ./resources/js/components/KanbanBoard.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/components/TrelloBoard.vue?vue&type=script&lang=js& ***!
   \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./KanbanBoard.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KanbanBoard.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./TrelloBoard.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrelloBoard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css&":
+/***/ "./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css&":
 /*!**********************************************************************************************************!*\
-  !*** ./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css& ***!
+  !*** ./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css& ***!
   \**********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_style_index_0_id_12d93558_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KanbanBoard.vue?vue&type=style&index=0&id=12d93558&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_style_index_0_id_12d93558_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_style_index_0_id_12d93558_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_style_index_0_id_12d93558_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_style_index_0_id_12d93558_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_style_index_0_id_12d93558_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_style_index_0_id_6376dfc3_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrelloBoard.vue?vue&type=style&index=0&id=6376dfc3&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_style_index_0_id_6376dfc3_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_style_index_0_id_6376dfc3_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_style_index_0_id_6376dfc3_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_style_index_0_id_6376dfc3_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_style_index_0_id_6376dfc3_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
-/***/ "./resources/js/components/KanbanBoard.vue?vue&type=template&id=12d93558&scoped=true&":
+/***/ "./resources/js/components/TrelloBoard.vue?vue&type=template&id=6376dfc3&scoped=true&":
 /*!********************************************************************************************!*\
-  !*** ./resources/js/components/KanbanBoard.vue?vue&type=template&id=12d93558&scoped=true& ***!
+  !*** ./resources/js/components/TrelloBoard.vue?vue&type=template&id=6376dfc3&scoped=true& ***!
   \********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_template_id_12d93558_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./KanbanBoard.vue?vue&type=template&id=12d93558&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/KanbanBoard.vue?vue&type=template&id=12d93558&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_template_id_12d93558_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_template_id_6376dfc3_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./TrelloBoard.vue?vue&type=template&id=6376dfc3&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TrelloBoard.vue?vue&type=template&id=6376dfc3&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_template_id_6376dfc3_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_KanbanBoard_vue_vue_type_template_id_12d93558_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrelloBoard_vue_vue_type_template_id_6376dfc3_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
