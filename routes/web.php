@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('id-wise-task/{taskId}', 'TaskController@id_wise_task')->name('tasks.id_wise_task');
     Route::delete('remove/{taskId}', 'TaskController@remove')->name('tasks.remove');
     Route::put('task-update/{taskId}', 'TaskController@task_update')->name('tasks.task_update');
+    Route::put('status-update/{status_id}', 'TaskController@status_update')->name('tasks.status_update');
+    Route::put('status-undo/{status_id}', 'TaskController@undo_update')->name('tasks.undo_update');
     Route::post('tasks', 'TaskController@store')->name('tasks.store');
     Route::put('tasks/sync', 'TaskController@sync')->name('tasks.sync');
     Route::put('tasks/{task}', 'TaskController@update')->name('tasks.update');

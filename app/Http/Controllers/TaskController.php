@@ -12,14 +12,14 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = auth()->user()->statuses()->with('tasks')->get();
-     
+        $tasks = auth()->user()->statuses()->where('track', null)->with('tasks')->get();
+
         return view('tasks.index', compact('tasks'));
     }
 
     public function all_task()
     {
-        $tasks = auth()->user()->statuses()->with('tasks')->get();
+        $tasks = auth()->user()->statuses()->where('track', null)->with('tasks')->get();
         return $tasks;
     }
 
@@ -44,6 +44,26 @@ class TaskController extends Controller
             'description' => $request->description,
         ]);
         return $data;
+    }
+
+    public function status_update(Request $request)
+    {
+        $data = Status::find($request->status_id);
+
+        $data->track = 1;
+        $data->save();
+
+        return response()->json($data, 200);
+    }
+
+    public function undo_update(Request $request)
+    {
+        $data = Status::find($request->status_id);
+
+        $data->track = null;
+        $data->save();
+
+        return response()->json($data, 200);
     }
     public function create()
     {

@@ -13,12 +13,12 @@
             <h4 class="font-medium text-white">
               {{ status.title }}
             </h4>
-            <!-- <button
-              @click="openAddTaskForm(status.id)"
+            <button
+              @click="archive(status.id)"
               class="py-1 px-2 text-sm text-orange-500 hover:underline"
             >
-              Add Task
-            </button> -->
+              Archive
+            </button>
           </div>
           <div class="p-2 bg-blue-100">
             <!-- AddTaskForm -->
@@ -212,6 +212,7 @@
 import draggable from "vuedraggable";
 import AddTaskForm from "./AddTaskForm";
 import EditTaskForm from "./EditTaskForm";
+import { useToast } from "vue-toastification";
 
 export default {
   components: { draggable, AddTaskForm, EditTaskForm },
@@ -265,6 +266,67 @@ export default {
     //       this.handleErrors(err);
     //     });
     // },
+    archive(status_id) {
+      axios
+        .put(`status-update/${status_id}`)
+        .then(res => {
+          this.$toast({
+            render: h =>
+              h("div", [
+                h("span", "Status Archive  successfully."),
+                h(
+                  "button",
+                  {
+                    style: {
+                      marginLeft: "10px",
+                      color: "white",
+                      backgroundColor: "green",
+                      border: "none",
+                      padding: "5px 10px",
+                      cursor: "pointer"
+                    },
+                    on: {
+                      click: () => {
+                        this.undoUpdate(status_id);
+                        this.$toast.clear();
+                      }
+                    }
+                  },
+                  "Undo"
+                )
+              ]),
+            timeout: 5000,
+            closeOnClick: true,
+            onClose: () => {
+              console.log("Toast closed");
+            }
+          });
+
+          this.get();
+        })
+        .catch(err => {
+          this.handleErrors(err);
+        });
+    },
+    undoUpdate(status_id) {
+      axios
+        .put(`status-undo/${status_id}`)
+        .then(res => {
+          this.$toast.success("Undo updated successfully", {
+            timeout: 5000,
+            closeOnClick: true,
+            onClose: () => {
+              console.log("Toast closed");
+            }
+          });
+
+          this.get();
+        })
+        .catch(err => {
+          this.handleErrors(err);
+        });
+    },
+
     saveTask() {
       if (!this.board.title) {
         this.errorMessage = "The title field is required";
@@ -273,12 +335,10 @@ export default {
       axios
         .post("/statuses", this.board)
         .then(res => {
-         
           this.get();
           this.board.title = "";
         })
         .catch(err => {
-         
           this.handleErrors(err);
         });
     },
@@ -286,11 +346,9 @@ export default {
       axios
         .delete(`remove/${taskId}`)
         .then(res => {
-         
           this.get();
         })
         .catch(err => {
-         
           this.handleErrors(err);
         });
     },
@@ -347,7 +405,6 @@ export default {
       this.get();
     },
     handleTaskMoved(evt) {
-      
       axios
         .put("/tasks/sync", { columns: this.statuses })
         .then(response => {
