@@ -1,6 +1,6 @@
 <template>
   <div class="relative p-2 flex overflow-x-auto h-full">
-    <draggable class="flex dragArea" axis="x">
+    <draggable class="flex dragArea" axis="x"  v-model="statuses"  @end="handleStatusMoved">
       <div
         v-for="status in statuses"
         :key="status.slug"
@@ -266,6 +266,19 @@ export default {
     //       this.handleErrors(err);
     //     });
     // },
+    handleStatusMoved(){
+    
+      axios
+        .put("/status/sync", { columns: this.statuses })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(err => {
+          console.log(err.response);
+        });
+   
+
+    },
     archive(status_id) {
       axios
         .put(`status-update/${status_id}`)
@@ -420,12 +433,12 @@ export default {
       axios
         .get("/all-tasks", this.newTask)
         .then(res => {
-          // Tell the parent component we've added a new task and include it
+          
           this.statuses = res.data;
           this.items = res.data;
         })
         .catch(err => {
-          // Handle the error returned from our request
+          
           this.handleErrors(err);
         });
     }

@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('status-undo/{status_id}', 'TaskController@undo_update')->name('tasks.undo_update');
     Route::post('tasks', 'TaskController@store')->name('tasks.store');
     Route::put('tasks/sync', 'TaskController@sync')->name('tasks.sync');
+    Route::put('status/sync', 'TaskController@status')->name('tasks.status');
     Route::put('tasks/{task}', 'TaskController@update')->name('tasks.update');
 });
 

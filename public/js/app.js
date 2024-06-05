@@ -2457,6 +2457,15 @@ __webpack_require__.r(__webpack_exports__);
     //       this.handleErrors(err);
     //     });
     // },
+    handleStatusMoved: function handleStatusMoved() {
+      axios.put("/status/sync", {
+        columns: this.statuses
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (err) {
+        console.log(err.response);
+      });
+    },
     archive: function archive(status_id) {
       var _this = this;
 
@@ -2595,11 +2604,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this6 = this;
 
       axios.get("/all-tasks", this.newTask).then(function (res) {
-        // Tell the parent component we've added a new task and include it
         _this6.statuses = res.data;
         _this6.items = res.data;
       })["catch"](function (err) {
-        // Handle the error returned from our request
         _this6.handleErrors(err);
       });
     }
@@ -24875,7 +24882,18 @@ var render = function() {
     [
       _c(
         "draggable",
-        { staticClass: "flex dragArea", attrs: { axis: "x" } },
+        {
+          staticClass: "flex dragArea",
+          attrs: { axis: "x" },
+          on: { end: _vm.handleStatusMoved },
+          model: {
+            value: _vm.statuses,
+            callback: function($$v) {
+              _vm.statuses = $$v
+            },
+            expression: "statuses"
+          }
+        },
         [
           _vm._l(_vm.statuses, function(status) {
             return _c(

@@ -103,6 +103,24 @@ class TaskController extends Controller
         return $request->user()->statuses()->with('tasks')->get();
     }
 
+    public function status(Request $request)
+    {
+        $this->validate(request(), [
+            'columns' => ['required', 'array']
+        ]);
+
+
+        foreach ($request->columns as $index => $status) {
+            $card = Status::find($status['id']); // Access 'id' attribute
+            if ($card) {
+                $card->order = $index + 1;
+                $card->save();
+            }
+        }
+        
+        return $request->user()->statuses()->get();
+    }
+
     public function show(Task $task)
     {
         //
