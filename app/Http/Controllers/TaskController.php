@@ -56,6 +56,8 @@ class TaskController extends Controller
         return response()->json($data, 200);
     }
 
+     /*------ Archive Board Undo -------*/
+
     public function undo_update(Request $request)
     {
         $data = Status::find($request->status_id);
@@ -83,6 +85,9 @@ class TaskController extends Controller
             ->create($request->only('title', 'description', 'status_id'));
     }
 
+    /*------ After Drag and drop card list position update -------*/
+
+
     public function sync(Request $request)
     {
         $this->validate(request(), [
@@ -103,6 +108,10 @@ class TaskController extends Controller
         return $request->user()->statuses()->with('tasks')->get();
     }
 
+
+    /*------ Board Drag and Drop and position update and after page reload Board position not reset -----*/
+
+
     public function status(Request $request)
     {
         $this->validate(request(), [
@@ -111,13 +120,13 @@ class TaskController extends Controller
 
 
         foreach ($request->columns as $index => $status) {
-            $card = Status::find($status['id']); // Access 'id' attribute
+            $card = Status::find($status['id']);
             if ($card) {
                 $card->order = $index + 1;
                 $card->save();
             }
         }
-        
+
         return $request->user()->statuses()->get();
     }
 

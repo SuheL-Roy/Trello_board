@@ -1,6 +1,11 @@
 <template>
   <div class="relative p-2 flex overflow-x-auto h-full">
-    <draggable class="flex dragArea" axis="x"  v-model="statuses"  @end="handleStatusMoved">
+    <draggable
+      class="flex dragArea"
+      axis="x"
+      v-model="statuses"
+      @end="handleStatusMoved"
+    >
       <div
         v-for="status in statuses"
         :key="status.slug"
@@ -10,9 +15,26 @@
       >
         <div class="rounded-md shadow-md overflow-hidden">
           <div class="p-3 flex justify-between items-baseline bg-blue-800">
-            <h4 class="font-medium text-white">
+            <!-- <h4 class="font-medium text-white">
               {{ status.title }}
-            </h4>
+            </h4> -->
+            <div class="flex items-baseline">
+              <h4
+                v-if="!isEditing(status.id)"
+                class="font-medium text-white cursor-pointer"
+                @click="startEditing(status.id)"
+              >
+                {{ status.title }}
+              </h4>
+              <input
+                v-if="isEditing(status.id)"
+                v-model="editingTitle"
+                :ref="'input_' + status.id"
+                class="font-medium text-white bg-blue-800"
+                @blur="saveTitle(status.id)"
+                @keyup.enter="saveTitle(status.id)"
+              />
+            </div>
             <button
               @click="archive(status.id)"
               class="py-1 px-2 text-sm text-orange-500 hover:underline"
@@ -232,7 +254,9 @@ export default {
       board: {
         title: ""
       },
-      errorMessage: ""
+      errorMessage: "",
+      editingStatusId: null,
+      editingTitle: ""
     };
   },
   computed: {
@@ -266,8 +290,39 @@ export default {
     //       this.handleErrors(err);
     //     });
     // },
-    handleStatusMoved(){
-    
+    startEditing(statusId) {
+      // this.editingStatusId = statusId;
+      // const status = this.statuses.find(status => status.id === statusId);
+      // this.editingTitle = status.title;
+      this.editingStatusId = statusId;
+      const status = this.statuses.find(status => status.id === statusId);
+      this.editingTitle = status.title;
+      this.$nextTick(() => {
+        const inputRef = this.$refs[`input_${statusId}`];
+        if (inputRef && inputRef[0]) {
+          inputRef[0].focus();
+        }
+      });
+    },
+    saveTitle(statusId) {
+      axios
+        .put(`/title-update/${statusId}`, { title: this.editingTitle })
+        .then(response => {
+          const status = this.statuses.find(status => status.id === statusId);
+          status.title = this.editingTitle;
+          this.editingStatusId = null;
+          this.get();
+        })
+        .catch(err => {
+          console.log(err.response);
+        });
+    },
+    isEditing(statusId) {
+      return this.editingStatusId === statusId;
+    },
+    handleStatusMoved() {
+      console.log(this.statuses);
+
       axios
         .put("/status/sync", { columns: this.statuses })
         .then(response => {
@@ -276,8 +331,6 @@ export default {
         .catch(err => {
           console.log(err.response);
         });
-   
-
     },
     archive(status_id) {
       axios
@@ -433,12 +486,10 @@ export default {
       axios
         .get("/all-tasks", this.newTask)
         .then(res => {
-          
           this.statuses = res.data;
           this.items = res.data;
         })
         .catch(err => {
-          
           this.handleErrors(err);
         });
     }

@@ -2397,6 +2397,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2423,7 +2445,9 @@ __webpack_require__.r(__webpack_exports__);
       board: {
         title: ""
       },
-      errorMessage: ""
+      errorMessage: "",
+      editingStatusId: null,
+      editingTitle: ""
     };
   },
   computed: {
@@ -2457,7 +2481,48 @@ __webpack_require__.r(__webpack_exports__);
     //       this.handleErrors(err);
     //     });
     // },
+    startEditing: function startEditing(statusId) {
+      var _this = this;
+
+      // this.editingStatusId = statusId;
+      // const status = this.statuses.find(status => status.id === statusId);
+      // this.editingTitle = status.title;
+      this.editingStatusId = statusId;
+      var status = this.statuses.find(function (status) {
+        return status.id === statusId;
+      });
+      this.editingTitle = status.title;
+      this.$nextTick(function () {
+        var inputRef = _this.$refs["input_".concat(statusId)];
+
+        if (inputRef && inputRef[0]) {
+          inputRef[0].focus();
+        }
+      });
+    },
+    saveTitle: function saveTitle(statusId) {
+      var _this2 = this;
+
+      axios.put("/title-update/".concat(statusId), {
+        title: this.editingTitle
+      }).then(function (response) {
+        var status = _this2.statuses.find(function (status) {
+          return status.id === statusId;
+        });
+
+        status.title = _this2.editingTitle;
+        _this2.editingStatusId = null;
+
+        _this2.get();
+      })["catch"](function (err) {
+        console.log(err.response);
+      });
+    },
+    isEditing: function isEditing(statusId) {
+      return this.editingStatusId === statusId;
+    },
     handleStatusMoved: function handleStatusMoved() {
+      console.log(this.statuses);
       axios.put("/status/sync", {
         columns: this.statuses
       }).then(function (response) {
@@ -2467,10 +2532,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     archive: function archive(status_id) {
-      var _this = this;
+      var _this3 = this;
 
       axios.put("status-update/".concat(status_id)).then(function (res) {
-        _this.$toast({
+        _this3.$toast({
           render: function render(h) {
             return h("div", [h("span", "Status Archive  successfully."), h("button", {
               style: {
@@ -2483,9 +2548,9 @@ __webpack_require__.r(__webpack_exports__);
               },
               on: {
                 click: function click() {
-                  _this.undoUpdate(status_id);
+                  _this3.undoUpdate(status_id);
 
-                  _this.$toast.clear();
+                  _this3.$toast.clear();
                 }
               }
             }, "Undo")]);
@@ -2497,16 +2562,16 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
 
-        _this.get();
+        _this3.get();
       })["catch"](function (err) {
-        _this.handleErrors(err);
+        _this3.handleErrors(err);
       });
     },
     undoUpdate: function undoUpdate(status_id) {
-      var _this2 = this;
+      var _this4 = this;
 
       axios.put("status-undo/".concat(status_id)).then(function (res) {
-        _this2.$toast.success("Undo updated successfully", {
+        _this4.$toast.success("Undo updated successfully", {
           timeout: 5000,
           closeOnClick: true,
           onClose: function onClose() {
@@ -2514,13 +2579,13 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
 
-        _this2.get();
+        _this4.get();
       })["catch"](function (err) {
-        _this2.handleErrors(err);
+        _this4.handleErrors(err);
       });
     },
     saveTask: function saveTask() {
-      var _this3 = this;
+      var _this5 = this;
 
       if (!this.board.title) {
         this.errorMessage = "The title field is required";
@@ -2528,20 +2593,20 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post("/statuses", this.board).then(function (res) {
-        _this3.get();
+        _this5.get();
 
-        _this3.board.title = "";
+        _this5.board.title = "";
       })["catch"](function (err) {
-        _this3.handleErrors(err);
+        _this5.handleErrors(err);
       });
     },
     deleteTask: function deleteTask(taskId) {
-      var _this4 = this;
+      var _this6 = this;
 
       axios["delete"]("remove/".concat(taskId)).then(function (res) {
-        _this4.get();
+        _this6.get();
       })["catch"](function (err) {
-        _this4.handleErrors(err);
+        _this6.handleErrors(err);
       });
     },
     editTask: function editTask(status_id, task_id) {
@@ -2588,26 +2653,26 @@ __webpack_require__.r(__webpack_exports__);
       this.get();
     },
     handleTaskMoved: function handleTaskMoved(evt) {
-      var _this5 = this;
+      var _this7 = this;
 
       axios.put("/tasks/sync", {
         columns: this.statuses
       }).then(function (response) {
-        _this5.get();
+        _this7.get();
 
-        _this5.closeAddTaskForm();
+        _this7.closeAddTaskForm();
       })["catch"](function (err) {
         console.log(err.response);
       });
     },
     get: function get(evt) {
-      var _this6 = this;
+      var _this8 = this;
 
       axios.get("/all-tasks", this.newTask).then(function (res) {
-        _this6.statuses = res.data;
-        _this6.items = res.data;
+        _this8.statuses = res.data;
+        _this8.items = res.data;
       })["catch"](function (err) {
-        _this6.handleErrors(err);
+        _this8.handleErrors(err);
       });
     }
   }
@@ -24922,12 +24987,72 @@ var render = function() {
                           "p-3 flex justify-between items-baseline bg-blue-800"
                       },
                       [
-                        _c("h4", { staticClass: "font-medium text-white" }, [
-                          _vm._v(
-                            "\n            " +
-                              _vm._s(status.title) +
-                              "\n          "
-                          )
+                        _c("div", { staticClass: "flex items-baseline" }, [
+                          !_vm.isEditing(status.id)
+                            ? _c(
+                                "h4",
+                                {
+                                  staticClass:
+                                    "font-medium text-white cursor-pointer",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.startEditing(status.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n              " +
+                                      _vm._s(status.title) +
+                                      "\n            "
+                                  )
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.isEditing(status.id)
+                            ? _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.editingTitle,
+                                    expression: "editingTitle"
+                                  }
+                                ],
+                                ref: "input_" + status.id,
+                                refInFor: true,
+                                staticClass:
+                                  "font-medium text-white bg-blue-800",
+                                domProps: { value: _vm.editingTitle },
+                                on: {
+                                  blur: function($event) {
+                                    return _vm.saveTitle(status.id)
+                                  },
+                                  keyup: function($event) {
+                                    if (
+                                      !$event.type.indexOf("key") &&
+                                      _vm._k(
+                                        $event.keyCode,
+                                        "enter",
+                                        13,
+                                        $event.key,
+                                        "Enter"
+                                      )
+                                    ) {
+                                      return null
+                                    }
+                                    return _vm.saveTitle(status.id)
+                                  },
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.editingTitle = $event.target.value
+                                  }
+                                }
+                              })
+                            : _vm._e()
                         ]),
                         _vm._v(" "),
                         _c(

@@ -10,14 +10,12 @@ class StatusController extends Controller
 {
     public function store(Request $request)
     {
+        $lastOrderId = Status::where('user_id', auth()->user()->id)->max('order');
 
-        $lastOrder = Status::orderBy('id', 'desc')->first();
-
-        if ($lastOrder) {
-            $lastOrderId = $lastOrder->order;
-        } else {
+        if ($lastOrderId === null) {
             $lastOrderId = 0;
         }
+
         $data = new Status();
         $data->title = $request->title;
         $data->slug = Str::slug($request->title);
@@ -25,5 +23,15 @@ class StatusController extends Controller
         $data->user_id = auth()->user()->id;
         $data->save();
         return response()->json($data);
+    }
+
+    public function update(Request $request)
+    {
+        $data = Status::find($request->statusId);
+        $data->update([
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
+        ]);
+        return $data;
     }
 }

@@ -38,5 +38,5 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('statuses', 'StatusController@store')->name('statuses.store');
-    Route::put('statuses', 'StatusController@update')->name('statuses.update');
+    Route::put('title-update/{statusId}', 'StatusController@update')->name('statuses.update');
 });
