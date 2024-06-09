@@ -15,9 +15,6 @@
       >
         <div class="rounded-md shadow-md overflow-hidden">
           <div class="p-3 flex justify-between items-baseline bg-blue-800">
-            <!-- <h4 class="font-medium text-white">
-              {{ status.title }}
-            </h4> -->
             <div class="flex items-baseline">
               <h4
                 v-if="!isEditing(status.id)"
@@ -40,6 +37,12 @@
               class="py-1 px-2 text-sm text-orange-500 hover:underline"
             >
               Archive
+            </button>
+            <button
+              class="py-1 px-2 text-sm text-orange-500 hover:underline"
+              @click="move(status.id)"
+            >
+              Move
             </button>
           </div>
           <div class="p-2 bg-blue-100">
@@ -156,7 +159,7 @@
               <div
                 class="modal-header px-4 py-2 bg-gray-200 flex justify-between items-center"
               >
-                <h3 class="text-lg font-semibold">Modal Title</h3>
+                <h3 class="text-lg font-semibold"></h3>
                 <button
                   @click="isOpen = false"
                   class="text-gray-600 hover:text-gray-800 focus:outline-none"
@@ -172,41 +175,38 @@
                   </svg>
                 </button>
               </div>
-
-              <!-- Modal Body -->
-              <div class="modal-body p-4">
-                <form @submit.prevent="saveTask2" class="w-64">
+              <form @submit.prevent="move_list" class="w-64">
+                <!-- Modal Body -->
+                <div class="modal-body p-4">
                   <div class="bg-white rounded p-6">
-                    <input
-                      type="text"
+                    <input type="hidden" v-model="tack_id" />
+                    <select
+                      v-model="selectedBoardId"
                       class="w-full border rounded-md px-3 py-2 no-outline"
-                      v-model="boards.title"
-                      placeholder="Enter board title"
-                    />
-                    <div v-show="errorMessage">
-                      <span class="text-xs text-red-500">
-                        {{ errorMessage }}
-                      </span>
-                    </div>
-                    <button
-                      type="submit"
-                      class="px-3 py-1 leading-5 text-white bg-orange-600 hover:bg-orange-500 rounded"
                     >
-                      Add
-                    </button>
+                      <option value="" selected>Select board</option>
+                      <option
+                        v-for="board in all_status"
+                        :key="board.id"
+                        :value="board.id"
+                        >{{ board.title }}</option
+                      >
+                    </select>
                   </div>
-                </form>
-              </div>
+                </div>
 
-              <!-- Modal Footer -->
-              <div class="modal-footer px-4 py-2 bg-gray-100 flex justify-end">
-                <button
-                  @click="isOpen = false"
-                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                <!-- Modal Footer -->
+                <div
+                  class="modal-footer px-4 py-2 bg-gray-100 flex justify-end"
                 >
-                  Close
-                </button>
-              </div>
+                  <button
+                    type="submit"
+                    class="px-3 py-1 leading-5 text-white bg-orange-600 hover:bg-orange-500 rounded"
+                  >
+                    Update
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -246,6 +246,9 @@ export default {
       statuses: [],
       items: [],
       boards: [],
+      all_status: [],
+      tack_id: "",
+      selectedBoardId: "",
       newTaskForStatus: 0,
       EditTaskForStatus: 0,
       task_ids: 0,
@@ -290,6 +293,33 @@ export default {
     //       this.handleErrors(err);
     //     });
     // },
+    move_list() {
+      axios
+        .post("/status-wise-task", {
+          tack_id: this.tack_id,
+          board_id: this.selectedBoardId
+        })
+        .then(res => {
+          // console.log(res);
+          this.get();
+          this.isOpen = false;
+        })
+        .catch(err => {
+          this.handleErrors(err);
+        });
+    },
+    move(move_id) {
+      this.isOpen = true;
+      this.tack_id = move_id;
+      axios
+        .get("/all-statuses")
+        .then(res => {
+          this.all_status = res.data;
+        })
+        .catch(err => {
+          this.handleErrors(err);
+        });
+    },
     startEditing(statusId) {
       // this.editingStatusId = statusId;
       // const status = this.statuses.find(status => status.id === statusId);

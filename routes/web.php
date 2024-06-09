@@ -25,6 +25,7 @@ Route::get('/home', function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('tasks', 'TaskController@index')->name('tasks.index');
     Route::get('all-tasks', 'TaskController@all_task')->name('tasks.all_task');
+    Route::post('status-wise-task', 'TaskController@status_wise_task')->name('tasks.status_wise_task');
     Route::get('id-wise-task/{taskId}', 'TaskController@id_wise_task')->name('tasks.id_wise_task');
     Route::delete('remove/{taskId}', 'TaskController@remove')->name('tasks.remove');
     Route::put('task-update/{taskId}', 'TaskController@task_update')->name('tasks.task_update');
@@ -38,5 +39,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('statuses', 'StatusController@store')->name('statuses.store');
+    Route::get('all-statuses', 'StatusController@all_status')->name('statuses.all_status');
     Route::put('title-update/{statusId}', 'StatusController@update')->name('statuses.update');
 });

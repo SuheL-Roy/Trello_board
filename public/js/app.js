@@ -2437,6 +2437,9 @@ __webpack_require__.r(__webpack_exports__);
       statuses: [],
       items: [],
       boards: [],
+      all_status: [],
+      tack_id: "",
+      selectedBoardId: "",
       newTaskForStatus: 0,
       EditTaskForStatus: 0,
       task_ids: 0,
@@ -2481,8 +2484,34 @@ __webpack_require__.r(__webpack_exports__);
     //       this.handleErrors(err);
     //     });
     // },
-    startEditing: function startEditing(statusId) {
+    move_list: function move_list() {
       var _this = this;
+
+      axios.post("/status-wise-task", {
+        tack_id: this.tack_id,
+        board_id: this.selectedBoardId
+      }).then(function (res) {
+        // console.log(res);
+        _this.get();
+
+        _this.isOpen = false;
+      })["catch"](function (err) {
+        _this.handleErrors(err);
+      });
+    },
+    move: function move(move_id) {
+      var _this2 = this;
+
+      this.isOpen = true;
+      this.tack_id = move_id;
+      axios.get("/all-statuses").then(function (res) {
+        _this2.all_status = res.data;
+      })["catch"](function (err) {
+        _this2.handleErrors(err);
+      });
+    },
+    startEditing: function startEditing(statusId) {
+      var _this3 = this;
 
       // this.editingStatusId = statusId;
       // const status = this.statuses.find(status => status.id === statusId);
@@ -2493,7 +2522,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.editingTitle = status.title;
       this.$nextTick(function () {
-        var inputRef = _this.$refs["input_".concat(statusId)];
+        var inputRef = _this3.$refs["input_".concat(statusId)];
 
         if (inputRef && inputRef[0]) {
           inputRef[0].focus();
@@ -2501,19 +2530,19 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveTitle: function saveTitle(statusId) {
-      var _this2 = this;
+      var _this4 = this;
 
       axios.put("/title-update/".concat(statusId), {
         title: this.editingTitle
       }).then(function (response) {
-        var status = _this2.statuses.find(function (status) {
+        var status = _this4.statuses.find(function (status) {
           return status.id === statusId;
         });
 
-        status.title = _this2.editingTitle;
-        _this2.editingStatusId = null;
+        status.title = _this4.editingTitle;
+        _this4.editingStatusId = null;
 
-        _this2.get();
+        _this4.get();
       })["catch"](function (err) {
         console.log(err.response);
       });
@@ -2532,10 +2561,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     archive: function archive(status_id) {
-      var _this3 = this;
+      var _this5 = this;
 
       axios.put("status-update/".concat(status_id)).then(function (res) {
-        _this3.$toast({
+        _this5.$toast({
           render: function render(h) {
             return h("div", [h("span", "Status Archive  successfully."), h("button", {
               style: {
@@ -2548,9 +2577,9 @@ __webpack_require__.r(__webpack_exports__);
               },
               on: {
                 click: function click() {
-                  _this3.undoUpdate(status_id);
+                  _this5.undoUpdate(status_id);
 
-                  _this3.$toast.clear();
+                  _this5.$toast.clear();
                 }
               }
             }, "Undo")]);
@@ -2562,16 +2591,16 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
 
-        _this3.get();
+        _this5.get();
       })["catch"](function (err) {
-        _this3.handleErrors(err);
+        _this5.handleErrors(err);
       });
     },
     undoUpdate: function undoUpdate(status_id) {
-      var _this4 = this;
+      var _this6 = this;
 
       axios.put("status-undo/".concat(status_id)).then(function (res) {
-        _this4.$toast.success("Undo updated successfully", {
+        _this6.$toast.success("Undo updated successfully", {
           timeout: 5000,
           closeOnClick: true,
           onClose: function onClose() {
@@ -2579,13 +2608,13 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
 
-        _this4.get();
+        _this6.get();
       })["catch"](function (err) {
-        _this4.handleErrors(err);
+        _this6.handleErrors(err);
       });
     },
     saveTask: function saveTask() {
-      var _this5 = this;
+      var _this7 = this;
 
       if (!this.board.title) {
         this.errorMessage = "The title field is required";
@@ -2593,20 +2622,20 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post("/statuses", this.board).then(function (res) {
-        _this5.get();
+        _this7.get();
 
-        _this5.board.title = "";
+        _this7.board.title = "";
       })["catch"](function (err) {
-        _this5.handleErrors(err);
+        _this7.handleErrors(err);
       });
     },
     deleteTask: function deleteTask(taskId) {
-      var _this6 = this;
+      var _this8 = this;
 
       axios["delete"]("remove/".concat(taskId)).then(function (res) {
-        _this6.get();
+        _this8.get();
       })["catch"](function (err) {
-        _this6.handleErrors(err);
+        _this8.handleErrors(err);
       });
     },
     editTask: function editTask(status_id, task_id) {
@@ -2653,26 +2682,26 @@ __webpack_require__.r(__webpack_exports__);
       this.get();
     },
     handleTaskMoved: function handleTaskMoved(evt) {
-      var _this7 = this;
+      var _this9 = this;
 
       axios.put("/tasks/sync", {
         columns: this.statuses
       }).then(function (response) {
-        _this7.get();
+        _this9.get();
 
-        _this7.closeAddTaskForm();
+        _this9.closeAddTaskForm();
       })["catch"](function (err) {
         console.log(err.response);
       });
     },
     get: function get(evt) {
-      var _this8 = this;
+      var _this10 = this;
 
       axios.get("/all-tasks", this.newTask).then(function (res) {
-        _this8.statuses = res.data;
-        _this8.items = res.data;
+        _this10.statuses = res.data;
+        _this10.items = res.data;
       })["catch"](function (err) {
-        _this8.handleErrors(err);
+        _this10.handleErrors(err);
       });
     }
   }
@@ -25067,6 +25096,20 @@ var render = function() {
                             }
                           },
                           [_vm._v("\n            Archive\n          ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "py-1 px-2 text-sm text-orange-500 hover:underline",
+                            on: {
+                              click: function($event) {
+                                return _vm.move(status.id)
+                              }
+                            }
+                          },
+                          [_vm._v("\n            Move\n          ")]
                         )
                       ]
                     ),
@@ -25276,11 +25319,9 @@ var render = function() {
                                 "modal-header px-4 py-2 bg-gray-200 flex justify-between items-center"
                             },
                             [
-                              _c(
-                                "h3",
-                                { staticClass: "text-lg font-semibold" },
-                                [_vm._v("Modal Title")]
-                              ),
+                              _c("h3", {
+                                staticClass: "text-lg font-semibold"
+                              }),
                               _vm._v(" "),
                               _c(
                                 "button",
@@ -25317,19 +25358,19 @@ var render = function() {
                             ]
                           ),
                           _vm._v(" "),
-                          _c("div", { staticClass: "modal-body p-4" }, [
-                            _c(
-                              "form",
-                              {
-                                staticClass: "w-64",
-                                on: {
-                                  submit: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.saveTask2($event)
-                                  }
+                          _c(
+                            "form",
+                            {
+                              staticClass: "w-64",
+                              on: {
+                                submit: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.move_list($event)
                                 }
-                              },
-                              [
+                              }
+                            },
+                            [
+                              _c("div", { staticClass: "modal-body p-4" }, [
                                 _c(
                                   "div",
                                   { staticClass: "bg-white rounded p-6" },
@@ -25339,100 +25380,103 @@ var render = function() {
                                         {
                                           name: "model",
                                           rawName: "v-model",
-                                          value: _vm.boards.title,
-                                          expression: "boards.title"
+                                          value: _vm.tack_id,
+                                          expression: "tack_id"
                                         }
                                       ],
-                                      staticClass:
-                                        "w-full border rounded-md px-3 py-2 no-outline",
-                                      attrs: {
-                                        type: "text",
-                                        placeholder: "Enter board title"
-                                      },
-                                      domProps: { value: _vm.boards.title },
+                                      attrs: { type: "hidden" },
+                                      domProps: { value: _vm.tack_id },
                                       on: {
                                         input: function($event) {
                                           if ($event.target.composing) {
                                             return
                                           }
-                                          _vm.$set(
-                                            _vm.boards,
-                                            "title",
-                                            $event.target.value
-                                          )
+                                          _vm.tack_id = $event.target.value
                                         }
                                       }
                                     }),
                                     _vm._v(" "),
                                     _c(
-                                      "div",
+                                      "select",
                                       {
                                         directives: [
                                           {
-                                            name: "show",
-                                            rawName: "v-show",
-                                            value: _vm.errorMessage,
-                                            expression: "errorMessage"
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.selectedBoardId,
+                                            expression: "selectedBoardId"
                                           }
-                                        ]
+                                        ],
+                                        staticClass:
+                                          "w-full border rounded-md px-3 py-2 no-outline",
+                                        on: {
+                                          change: function($event) {
+                                            var $$selectedVal = Array.prototype.filter
+                                              .call(
+                                                $event.target.options,
+                                                function(o) {
+                                                  return o.selected
+                                                }
+                                              )
+                                              .map(function(o) {
+                                                var val =
+                                                  "_value" in o
+                                                    ? o._value
+                                                    : o.value
+                                                return val
+                                              })
+                                            _vm.selectedBoardId = $event.target
+                                              .multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          }
+                                        }
                                       },
                                       [
                                         _c(
-                                          "span",
+                                          "option",
                                           {
-                                            staticClass: "text-xs text-red-500"
+                                            attrs: { value: "", selected: "" }
                                           },
-                                          [
-                                            _vm._v(
-                                              "\n                      " +
-                                                _vm._s(_vm.errorMessage) +
-                                                "\n                    "
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "px-3 py-1 leading-5 text-white bg-orange-600 hover:bg-orange-500 rounded",
-                                        attrs: { type: "submit" }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                    Add\n                  "
-                                        )
-                                      ]
+                                          [_vm._v("Select board")]
+                                        ),
+                                        _vm._v(" "),
+                                        _vm._l(_vm.all_status, function(board) {
+                                          return _c(
+                                            "option",
+                                            {
+                                              key: board.id,
+                                              domProps: { value: board.id }
+                                            },
+                                            [_vm._v(_vm._s(board.title))]
+                                          )
+                                        })
+                                      ],
+                                      2
                                     )
                                   ]
                                 )
-                              ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "modal-footer px-4 py-2 bg-gray-100 flex justify-end"
-                            },
-                            [
+                              ]),
+                              _vm._v(" "),
                               _c(
-                                "button",
+                                "div",
                                 {
                                   staticClass:
-                                    "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
-                                  on: {
-                                    click: function($event) {
-                                      _vm.isOpen = false
-                                    }
-                                  }
+                                    "modal-footer px-4 py-2 bg-gray-100 flex justify-end"
                                 },
                                 [
-                                  _vm._v(
-                                    "\n                Close\n              "
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "px-3 py-1 leading-5 text-white bg-orange-600 hover:bg-orange-500 rounded",
+                                      attrs: { type: "submit" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                  Update\n                "
+                                      )
+                                    ]
                                   )
                                 ]
                               )

@@ -34,4 +34,10 @@ class StatusController extends Controller
         ]);
         return $data;
     }
+
+    public function all_status(Request $request)
+    {
+        $all_status = Status::where('user_id', auth()->user()->id)->get();
+        return $all_status;
+    }
 }

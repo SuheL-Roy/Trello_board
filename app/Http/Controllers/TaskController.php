@@ -56,7 +56,7 @@ class TaskController extends Controller
         return response()->json($data, 200);
     }
 
-     /*------ Archive Board Undo -------*/
+    /*------ Archive Board Undo -------*/
 
     public function undo_update(Request $request)
     {
@@ -128,6 +128,12 @@ class TaskController extends Controller
         }
 
         return $request->user()->statuses()->get();
+    }
+
+    public function status_wise_task(Request $request)
+    {
+        $data = Task::where('status_id', $request->tack_id)->update(['status_id' => $request->board_id]);
+        return $data;
     }
 
     public function show(Task $task)
